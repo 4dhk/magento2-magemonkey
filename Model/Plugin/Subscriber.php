@@ -68,6 +68,7 @@ class Subscriber
         return [$customerId];
     }
 
+
     public function beforeSubscribeCustomerById(
         $subscriber,
         $customerId
@@ -108,6 +109,19 @@ class Subscriber
         return [$customerId];
     }
 
+    public function beforeUpdateSubscription(
+        $subscriber,
+        $customerId
+        ){
+        $subscriber->loadByCustomerId($customerId);
+        if($subscriber->isSubscribed()){
+            $this->beforeSubscribeCustomerById($subscriber,$customerId);
+        }
+        else{
+            $this->beforeUnsubscribeCustomerById($subscriber,$customerId);
+        }
+    }
+    
     public function beforeSubscribe(
         $subscriber,
         $email
