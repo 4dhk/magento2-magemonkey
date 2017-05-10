@@ -109,17 +109,22 @@ class Subscriber
         return [$customerId];
     }
 
-    public function beforeUpdateSubscription(
+    public function aroundUpdateSubscription(
         $subscriber,
+        $proceed, 
         $customerId
         ){
-        $subscriber->loadByCustomerId($customerId);
-        if($subscriber->isSubscribed()){
+
+        $subscriber = $proceed($customerId);
+
+        if($subscriber->isStatusChanged() && $status == \Magento\Newsletter\Model\Subscriber::STATUS_SUBSCRIBED) { 
             $this->beforeSubscribeCustomerById($subscriber,$customerId);
         }
-        else{
+        else if($subscriber->isStatusChanged() && $status == \Magento\Newsletter\Model\Subscriber::STATUS_SUBSCRIBED){
             $this->beforeUnsubscribeCustomerById($subscriber,$customerId);
         }
+
+        return $subscriber;
     }
     
     public function beforeSubscribe(
