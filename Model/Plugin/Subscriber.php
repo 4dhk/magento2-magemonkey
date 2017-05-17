@@ -117,10 +117,10 @@ class Subscriber
 
         $subscriber = $proceed($customerId);
 
-        if($subscriber->isStatusChanged() && $status == \Magento\Newsletter\Model\Subscriber::STATUS_SUBSCRIBED) { 
+        if($subscriber->isStatusChanged() && $subscriber->getStatus() == \Magento\Newsletter\Model\Subscriber::STATUS_SUBSCRIBED) { 
             $this->beforeSubscribeCustomerById($subscriber,$customerId);
         }
-        else if($subscriber->isStatusChanged() && $status == \Magento\Newsletter\Model\Subscriber::STATUS_SUBSCRIBED){
+        else if($subscriber->isStatusChanged() && $subscriber->getStatus() == \Magento\Newsletter\Model\Subscriber::STATUS_SUBSCRIBED){
             $this->beforeUnsubscribeCustomerById($subscriber,$customerId);
         }
 
