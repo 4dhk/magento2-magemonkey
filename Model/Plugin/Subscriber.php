@@ -74,6 +74,7 @@ class Subscriber
         $customerId
     ) {
         $subscriber->loadByCustomerId($customerId);
+        $subscriber->setImportMode(true);
         $storeId = $subscriber->getStoreId();
         if ($this->_helper->isMonkeyEnabled($storeId)) {
             $customer = $this->_customer->load($customerId);
