@@ -74,7 +74,6 @@ class Subscriber
         $customerId
     ) {
         $subscriber->loadByCustomerId($customerId);
-        $subscriber->setImportMode(true);
         $storeId = $subscriber->getStoreId();
         if ($this->_helper->isMonkeyEnabled($storeId)) {
             $customer = $this->_customer->load($customerId);
@@ -131,14 +130,15 @@ class Subscriber
         $subscriber,
         $email
     ) {
-    
         $storeId = $this->_storeManager->getStore()->getId();
-
+        if ($this->_helper->isMonkeyEnabled($storeId)) {
+            $subscriber->setImportMode(true);
+        }
+        
         $isSubscribeOwnEmail = $this->_customerSession->isLoggedIn()
             && $this->_customerSession->getCustomerDataObject()->getEmail() == $email;
         if (!$isSubscribeOwnEmail) {
             if ($this->_helper->isMonkeyEnabled($storeId)) {
-                $subscriber->setImportMode(true);
                 $api = $this->_api;
                 if ($this->_helper->isDoubleOptInEnabled($storeId)) {
                     $status = 'pending';
